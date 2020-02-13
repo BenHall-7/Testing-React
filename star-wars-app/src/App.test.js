@@ -52,10 +52,11 @@ test("Star Wars characters are rendered", async () => {
 
 test("Next button calls the API", async () => {
   let container = rtl.render(<StarWarsCharacters/>);
-  let next = await container.findByText(/Next/);
+  let next = await container.findByText(/Next/)
 
-  act(() => {
+  await act(async () => {
     rtl.fireEvent.click(next);
+    await container.findByText(/Next/);
   });
 
   expect(axios.get).toHaveBeenCalledTimes(2);
@@ -77,11 +78,12 @@ test("Previous button is disabled", async () => {
 test("Next button changes page content", async () => {
   let container = rtl.render(<StarWarsCharacters/>);
   let next = await container.findByText(/Next/);
+  let prev;
 
-  act(() => {
+  await act(async () => {
     rtl.fireEvent.click(next);
+    prev = await container.findByText(/Previous/);
   });
 
-  let prev = await container.findByText(/Previous/);
   expect(prev).not.toBeDisabled();
 });
